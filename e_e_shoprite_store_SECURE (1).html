@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E&amp;E Shoprite | Online Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:#f0b429; --gold-dark:#c8860a;
+    --navy:#0b1d3a; --navy-mid:#122545; --navy-light:#1b3560;
+    --white:#ffffff; --blue-soft:#a8c4f0;
+    --green-dark:#128c3e; --text-light:#d0dff5;
+    --card-bg:rgba(255,255,255,0.05);
+    --border:rgba(255,255,255,0.1);
+    --gold-border:rgba(240,180,41,0.25);
+    --danger:#ff4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;}
+  .hidden{display:none!important;}
+  .gold-bar{height:6px;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-dark));}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);box-shadow:0 4px 18px rgba(240,180,41,0.3);}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,180,41,0.45);}
+  .btn-ghost{background:var(--card-bg);border:1px solid var(--border);color:var(--white);}
+  .btn-ghost:hover{border-color:var(--gold);}
+  .btn-green{background:linear-gradient(135deg,#1ebe5d,var(--green-dark));color:white;box-shadow:0 4px 18px rgba(37,211,102,0.25);}
+  .btn-green:hover{transform:translateY(-2px);}
+  .btn-red{background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.4);color:#ff6b6b;}
+  .btn-red:hover{background:rgba(220,50,50,0.25);}
+  .btn-sm{padding:8px 16px;font-size:12px;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(11,29,58,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--gold-border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);cursor:pointer;user-select:none;}
+  /* Admin trigger hidden — activated only by secret click sequence on logo */
+  .nav-right{display:flex;align-items:center;gap:10px;}
+  .nav-admin-btn{font-size:12px;font-weight:700;color:var(--blue-soft);background:none;border:1px solid var(--border);padding:6px 14px;border-radius:20px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .nav-admin-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+  .hero{min-height:52vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 50px;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 20%,rgba(240,180,41,0.12) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 20% 80%,rgba(37,100,200,0.1) 0%,transparent 60%),linear-gradient(160deg,#0b1d3a 0%,#122545 50%,#1b3560 100%);}
+  .orb{position:absolute;border-radius:50%;animation:float 7s ease-in-out infinite;}
+  .orb1{width:280px;height:280px;top:-70px;right:-70px;background:radial-gradient(circle,rgba(240,180,41,0.15),transparent 70%);}
+  .orb2{width:220px;height:220px;bottom:-50px;left:-50px;background:radial-gradient(circle,rgba(37,100,200,0.13),transparent 70%);animation-delay:-3.5s;}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+  .hero-content{position:relative;z-index:2;}
+  .hero-badge{display:inline-block;background:rgba(240,180,41,0.12);border:1px solid rgba(240,180,41,0.35);border-radius:30px;padding:6px 18px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px;animation:fadeUp 0.7s ease both;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,9vw,68px);font-weight:700;line-height:1.05;color:var(--white);margin-bottom:14px;animation:fadeUp 0.7s 0.1s ease both;}
+  .hero-title span{color:var(--gold);}
+  .hero-sub{font-size:14px;color:var(--blue-soft);max-width:400px;line-height:1.75;margin:0 auto 28px;animation:fadeUp 0.7s 0.2s ease both;}
+  .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.7s 0.3s ease both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+  #shop{padding:50px 24px 80px;}
+  .shop-header{text-align:center;margin-bottom:36px;}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--white);margin-bottom:10px;}
+  .section-desc{font-size:13.5px;color:var(--blue-soft);max-width:440px;margin:0 auto;line-height:1.7;}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:34px;}
+  .filter-btn{padding:7px 18px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--card-bg);color:var(--text-light);font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .filter-btn.active,.filter-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,0.08);}
+
+  .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
+  .product-card{background:var(--card-bg);border:1px solid var(--gold-border);border-radius:18px;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;animation:fadeUp 0.5s ease both;}
+  .product-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(240,180,41,0.12);border-color:rgba(240,180,41,0.5);}
+  .product-img-wrap{width:100%;height:200px;overflow:hidden;background:var(--navy-mid);position:relative;}
+  .product-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+  .product-card:hover .product-img-wrap img{transform:scale(1.06);}
+  .product-category-tag{position:absolute;top:10px;left:10px;background:rgba(11,29,58,0.85);border:1px solid var(--gold-border);border-radius:12px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(8px);}
+  .product-body{padding:16px;}
+  .product-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px;line-height:1.4;}
+  .product-desc{font-size:12px;color:var(--blue-soft);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .product-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:14px;}
+  .product-price span{font-size:13px;color:var(--blue-soft);font-family:'DM Sans',sans-serif;font-weight:400;}
+  .wa-order-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,#1ebe5d,var(--green-dark));color:white;font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s;box-shadow:0 4px 16px rgba(37,211,102,0.2);}
+  .wa-order-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,0.4);}
+  .empty-state{text-align:center;padding:80px 24px;grid-column:1/-1;}
+  .empty-icon{font-size:56px;margin-bottom:16px;}
+  .empty-title{font-size:20px;font-weight:700;color:var(--blue-soft);margin-bottom:8px;}
+  .empty-sub{font-size:13px;color:rgba(168,196,240,0.6);}
+  .spinner{text-align:center;padding:60px;grid-column:1/-1;}
+  .spin{display:inline-block;width:40px;height:40px;border:3px solid rgba(240,180,41,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spin-label{color:var(--blue-soft);font-size:13px;}
+
+  footer{background:#07101f;text-align:center;padding:30px 24px;border-top:1px solid var(--gold-border);}
+  .footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+  .footer-text{font-size:12px;color:var(--blue-soft);line-height:1.9;}
+  .footer-wa{display:inline-flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+
+  /* ── LOGIN MODAL ── */
+  .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(5,12,26,0.95);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;}
+  .login-box{background:var(--navy-mid);border:1px solid var(--gold-border);border-radius:20px;padding:40px 36px;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6);animation:popIn 0.3s ease;}
+  @keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+  .login-icon{font-size:44px;margin-bottom:16px;}
+  .login-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+  .login-sub{font-size:13px;color:var(--blue-soft);margin-bottom:28px;}
+  .form-group{margin-bottom:16px;text-align:left;}
+  .form-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-soft);display:block;margin-bottom:6px;}
+  .form-input{width:100%;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--white);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+  .form-input:focus{border-color:var(--gold);}
+  .form-input::placeholder{color:rgba(168,196,240,0.4);}
+  select.form-input{cursor:pointer;}
+  .login-error{color:#ff6b6b;font-size:12px;margin-bottom:14px;padding:10px 14px;background:rgba(255,100,100,0.08);border:1px solid rgba(255,100,100,0.25);border-radius:10px;display:none;text-align:left;}
+  .lockout-timer{color:#ff9944;font-size:12px;margin-bottom:14px;padding:10px 14px;background:rgba(255,150,50,0.08);border:1px solid rgba(255,150,50,0.25);border-radius:10px;display:none;text-align:center;}
+
+  /* Attempt dots */
+  .attempt-dots{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+  .attempt-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+  .attempt-dot.used{background:var(--danger);}
+  .attempt-dot.ok{background:#25d366;}
+
+  /* Session indicator */
+  .session-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--navy-mid);border-top:1px solid var(--gold-border);padding:8px 20px;font-size:11px;color:var(--blue-soft);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .session-bar.active{display:flex;}
+  .session-countdown{color:var(--gold);font-weight:700;font-size:12px;}
+  .session-bar-progress{position:absolute;top:0;left:0;height:2px;background:var(--gold);transition:width 1s linear;}
+
+  /* ── ADMIN PANEL ── */
+  .admin-panel{background:var(--navy);min-height:100vh;padding-top:60px;padding-bottom:50px;}
+  .admin-topbar{background:var(--navy-mid);border-bottom:1px solid var(--border);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .admin-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold);}
+  .admin-subtitle{font-size:12px;color:var(--blue-soft);margin-top:2px;}
+  .admin-content{padding:28px;max-width:1200px;margin:0 auto;}
+
+  .setup-box{background:rgba(240,180,41,0.07);border:2px dashed var(--gold);border-radius:16px;padding:24px;margin-bottom:24px;}
+  .setup-box h3{color:var(--gold);font-size:17px;margin-bottom:12px;}
+  .setup-box ol{color:var(--text-light);font-size:13px;padding-left:20px;line-height:2.2;}
+  .setup-box ol li b{color:var(--gold);}
+  .setup-box code{background:rgba(0,0,0,0.3);border-radius:6px;padding:2px 8px;font-size:12px;color:#ffd;font-family:monospace;}
+
+  /* Security info box */
+  .security-info{background:rgba(37,211,102,0.05);border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;}
+  .security-info-icon{font-size:22px;margin-top:2px;}
+  .security-info-text{font-size:12px;color:rgba(168,240,196,0.85);line-height:1.8;}
+  .security-info-text strong{color:#4dff91;display:block;margin-bottom:4px;font-size:13px;}
+
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px;}
+  .stat-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px 18px;text-align:center;}
+  .stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);}
+  .stat-label{font-size:12px;color:var(--blue-soft);margin-top:4px;font-weight:600;}
+
+  .add-product-section{background:var(--card-bg);border:1px solid var(--gold-border);border-radius:18px;padding:26px;margin-bottom:28px;}
+  .add-section-title{font-size:16px;font-weight:700;color:var(--gold);margin-bottom:20px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .form-grid .full{grid-column:1/-1;}
+  .img-upload-area{border:2px dashed rgba(240,180,41,0.3);border-radius:14px;padding:28px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;position:relative;}
+  .img-upload-area:hover{border-color:var(--gold);background:rgba(240,180,41,0.04);}
+  .img-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .img-upload-icon{font-size:32px;margin-bottom:8px;}
+  .img-upload-text{font-size:13px;color:var(--blue-soft);}
+  .img-upload-hint{font-size:11px;color:rgba(168,196,240,0.5);margin-top:4px;}
+  .img-preview-box{width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-top:12px;display:none;}
+  .saving-ind{font-size:12px;color:var(--gold);padding:8px 0;display:none;}
+
+  .admin-prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+  .admin-prod-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  .admin-prod-img{width:100%;height:140px;object-fit:cover;background:var(--navy-mid);}
+  .admin-prod-body{padding:12px;}
+  .admin-prod-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px;}
+  .admin-prod-price{font-size:13px;color:var(--gold);font-weight:700;margin-bottom:10px;}
+  .admin-prod-actions{display:flex;gap:8px;}
+
+  .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:var(--navy-mid);border:1px solid var(--gold-border);border-radius:30px;padding:12px 24px;font-size:13px;font-weight:700;color:var(--white);box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+  .toast.show{opacity:1;}
+
+  @media(max-width:600px){
+    .form-grid{grid-template-columns:1fr;}
+    .form-grid .full{grid-column:1;}
+    .admin-content{padding:20px 16px;}
+    .hero-title{font-size:36px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="gold-bar"></div>
+
+<nav>
+  <!-- Secret: click logo 5 times quickly to open admin -->
+  <div class="nav-logo" id="navLogo" onclick="handleLogoClick()" title="E&amp;E Shoprite">E&amp;E Shoprite</div>
+  <div class="nav-right">
+    <button class="nav-admin-btn hidden" id="adminNavBtn" onclick="handleAdminBtn()">⚙️ Dashboard</button>
+    <a href="https://wa.me/233538812710" class="btn btn-green btn-sm">💬 WhatsApp</a>
+  </div>
+</nav>
+
+<!-- STORE -->
+<div id="storeView">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="orb orb1"></div><div class="orb orb2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">⭐ Hill Top · IPT · Kumasi</div>
+      <h1 class="hero-title">E&amp;E <span>Shoprite</span></h1>
+      <p class="hero-sub">Browse our products and order instantly on WhatsApp. We deliver to your door!</p>
+      <div class="hero-btns">
+        <a href="#shop" class="btn btn-gold">🛍️ Shop Now</a>
+        <a href="https://wa.me/233538812710" class="btn btn-ghost">💬 WhatsApp Us</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <div class="shop-header">
+      <div class="section-label">Our Products</div>
+      <h2 class="section-title">Browse &amp; Order</h2>
+      <p class="section-desc">Tap the WhatsApp button on any product to place your order instantly!</p>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProducts('Home Appliances',this)">🏠 Home Appliances</button>
+      <button class="filter-btn" onclick="filterProducts('Body Care',this)">💆 Body Care</button>
+      <button class="filter-btn" onclick="filterProducts('Electrical',this)">⚡ Electrical</button>
+      <button class="filter-btn" onclick="filterProducts('Other',this)">🛍️ Other</button>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <div class="spinner"><div class="spin"></div><div class="spin-label">Loading products...</div></div>
+    </div>
+  </section>
+
+  <div class="gold-bar"></div>
+  <footer>
+    <div class="footer-logo">E&amp;E Shoprite</div>
+    <div class="footer-text">Hill Top, IPT — Kumasi, Ghana<br>We source it. We deliver it. You enjoy it. ✦</div>
+    <div class="footer-wa">
+      <a href="https://wa.me/233538812710" class="btn btn-green btn-sm">💬 +233 53 881 2710</a>
+      <a href="https://wa.me/233598979254" class="btn btn-green btn-sm">💬 059 897 9254</a>
+    </div>
+  </footer>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay hidden" id="loginModal">
+  <div class="login-box">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Admin Access</div>
+    <div class="login-sub" id="loginSub">Restricted area — authorised personnel only</div>
+
+    <!-- Attempt indicators -->
+    <div class="attempt-dots" id="attemptDots">
+      <div class="attempt-dot" id="dot1"></div>
+      <div class="attempt-dot" id="dot2"></div>
+      <div class="attempt-dot" id="dot3"></div>
+    </div>
+
+    <div class="login-error" id="loginError"></div>
+    <div class="lockout-timer" id="lockoutTimer"></div>
+
+    <div class="form-group" id="passGroup">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="loginPass" placeholder="Enter admin password" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-gold" id="loginBtn" style="width:100%;justify-content:center;margin-top:8px;" onclick="doLogin()">🔓 Login</button>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:10px;" onclick="closeLogin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="admin-panel hidden">
+  <div class="admin-topbar">
+    <div>
+      <div class="admin-title">⚙️ Admin Dashboard</div>
+      <div class="admin-subtitle">Manage E&amp;E Shoprite products · Session expires in <span id="sessionTimeDisplay">--:--</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-ghost btn-sm" onclick="showStore()">👁️ View Store</button>
+      <button class="btn btn-red btn-sm" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- Security status -->
+    <div class="security-info">
+      <div class="security-info-icon">🛡️</div>
+      <div class="security-info-text">
+        <strong>You are in a secure admin session</strong>
+        Auto-logout after 1 hour. Inactive for 30 minutes also logs you out. All actions are rate-limited.
+      </div>
+    </div>
+
+    <div class="setup-box" id="setupBox" style="display:none;">
+      <h3>✅ JSONBin Connected</h3>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total Products</div></div>
+      <div class="stat-card"><div class="stat-num" id="statHome">0</div><div class="stat-label">Home Appliances</div></div>
+      <div class="stat-card"><div class="stat-num" id="statBody">0</div><div class="stat-label">Body Care</div></div>
+      <div class="stat-card"><div class="stat-num" id="statElec">0</div><div class="stat-label">Electrical</div></div>
+    </div>
+
+    <div class="add-product-section">
+      <div class="add-section-title">➕ Add New Product</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Product Name *</label>
+          <input class="form-input" type="text" id="pName" placeholder="e.g. Samsung 55-inch TV" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price (GH₵) *</label>
+          <input class="form-input" type="text" id="pPrice" placeholder="e.g. 1,500" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select class="form-input" id="pCategory">
+            <option value="">Select category...</option>
+            <option value="Home Appliances">🏠 Home Appliances</option>
+            <option value="Body Care">💆 Body Care</option>
+            <option value="Electrical">⚡ Electrical</option>
+            <option value="Other">🛍️ Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp Number</label>
+          <select class="form-input" id="pWA">
+            <option value="233538812710">+233 53 881 2710</option>
+            <option value="233598979254">059 897 9254</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Description</label>
+          <input class="form-input" type="text" id="pDesc" placeholder="Brief description of the product" autocomplete="off">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Product Image *</label>
+          <div class="img-upload-area">
+            <input type="file" accept="image/*" id="pImage" onchange="previewImage(event)">
+            <div class="img-upload-icon">📸</div>
+            <div class="img-upload-text">Click to upload product photo</div>
+            <div class="img-upload-hint">Photo will be auto-compressed for fast loading</div>
+            <img id="imgPreview" class="img-preview-box" src="" alt="preview">
+          </div>
+        </div>
+      </div>
+      <div class="saving-ind" id="savingInd">⏳ Saving to database... please wait</div>
+      <button class="btn btn-gold" style="margin-top:18px;" onclick="addProduct()">✅ Add Product to Store</button>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <span style="font-size:16px;font-weight:700;">📦 Your Products</span>
+        <span id="adminProdCount" style="font-size:12px;color:var(--blue-soft);"></span>
+      </div>
+      <div class="admin-prod-grid" id="adminProdGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Session bar -->
+<div class="session-bar" id="sessionBar">
+  <div class="session-bar-progress" id="sessionProgress"></div>
+  <span>🔒 Secure admin session</span>
+  <span class="session-countdown" id="sessionBarTime"></span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ╔══════════════════════════════════════════╗
+// ║       GOOGLE APPS SCRIPT BACKEND         ║
+// ╚══════════════════════════════════════════╝
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwoj_4WYZbD7UQSj6WtMrrdraVi3cKHl9iu1uOXiQi7ZMoS55K5MvGLD-JhpNDFR_TLOA/exec';
+// ════════════════════════════════════════════
+// PASSWORD IS NOW HASHED — do NOT store plaintext here
+// To change password: use sha256 of your new password
+// Current password hash (SHA-256 of "EEShoprite2024"):
+const _H = 'f9ed485e224db1de2842a661576f38e0cb9a78a794eda954df8e2b468c7cabc2';
+// ════════════════════════════════════════════
+
+// ── SECURITY CONSTANTS ──
+const MAX_ATTEMPTS   = 3;          // lockout after 3 wrong passwords
+const LOCKOUT_MS     = 5 * 60000;  // 5 minute lockout
+const SESSION_MS     = 60 * 60000; // 1 hour session
+const INACTIVITY_MS  = 30 * 60000; // 30 min inactivity logout
+const SECRET_CLICKS  = 5;          // logo clicks to reveal admin
+const SECRET_WINDOW  = 3000;       // within 3 seconds
+
+// ── SECURITY STATE ──
+let _attempts     = 0;
+let _lockedUntil  = 0;
+let _sessionToken = null;
+let _sessionStart = 0;
+let _inactTimer   = null;
+let _sessionTimer = null;
+let _logoClicks   = 0;
+let _logoTimer    = null;
+let _sessionInterval = null;
+
+// ── SHA-256 (native browser crypto) ──
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── GENERATE SESSION TOKEN ──
+function _genToken() {
+  const arr = new Uint8Array(32);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── PRODUCTS STATE ──
+let products = [];
+let isLoggedIn = false;
+let currentFilter = 'all';
+let currentImg = '';
+
+// ════════════════════════════════════════
+// SECRET LOGO CLICK — 5 rapid clicks
+// ════════════════════════════════════════
+function handleLogoClick() {
+  _logoClicks++;
+  clearTimeout(_logoTimer);
+  if (_logoClicks >= SECRET_CLICKS) {
+    _logoClicks = 0;
+    handleAdminBtn();
+  } else {
+    _logoTimer = setTimeout(() => { _logoClicks = 0; }, SECRET_WINDOW);
+  }
+}
+
+// ════════════════════════════════════════
+// RATE LIMITER — throttle login calls
+// ════════════════════════════════════════
+let _lastLoginCall = 0;
+function _rateOk() {
+  const now = Date.now();
+  if (now - _lastLoginCall < 800) return false; // 800ms between calls
+  _lastLoginCall = now;
+  return true;
+}
+
+// ════════════════════════════════════════
+// LOGIN / LOGOUT
+// ════════════════════════════════════════
+function handleAdminBtn() {
+  if (isLoggedIn && _sessionToken) { showAdmin(); return; }
+  openLogin();
+}
+
+function openLogin() {
+  _syncAttemptDots();
+  document.getElementById('loginModal').classList.remove('hidden');
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginPass').value = '';
+  // Check lockout on open
+  if (Date.now() < _lockedUntil) { _applyLockoutUI(); }
+  else { _clearLockoutUI(); }
+  setTimeout(() => document.getElementById('loginPass').focus(), 80);
+}
+
+function closeLogin() {
+  document.getElementById('loginModal').classList.add('hidden');
+  document.getElementById('loginPass').value = '';
+}
+
+async function doLogin() {
+  if (!_rateOk()) return; // throttle rapid calls
+
+  const now = Date.now();
+  if (now < _lockedUntil) { _applyLockoutUI(); return; }
+
+  const pass = document.getElementById('loginPass').value;
+  if (!pass) { _showLoginError('Please enter your password.'); return; }
+
+  // Hash in browser — never compare plaintext
+  const hashed = await sha256(pass);
+
+  if (hashed === _H) {
+    // ✅ SUCCESS
+    _attempts = 0;
+    _lockedUntil = 0;
+    isLoggedIn = true;
+    _sessionToken = _genToken();
+    _sessionStart = Date.now();
+    _syncAttemptDots();
+    closeLogin();
+    document.getElementById('adminNavBtn').classList.remove('hidden');
+    document.getElementById('adminNavBtn').textContent = '⚙️ Dashboard';
+    _startSession();
+    showAdmin();
+  } else {
+    // ❌ WRONG
+    _attempts++;
+    _syncAttemptDots();
+    document.getElementById('loginPass').value = '';
+
+    if (_attempts >= MAX_ATTEMPTS) {
+      _lockedUntil = Date.now() + LOCKOUT_MS;
+      _attempts = MAX_ATTEMPTS; // cap
+      _applyLockoutUI();
+    } else {
+      const left = MAX_ATTEMPTS - _attempts;
+      _showLoginError(`❌ Wrong password. ${left} attempt${left!==1?'s':''} left.`);
+    }
+  }
+}
+
+function logout() {
+  _endSession();
+  isLoggedIn = false;
+  _sessionToken = null;
+  document.getElementById('adminNavBtn').classList.add('hidden');
+  showStore();
+  toast('👋 Logged out securely');
+}
+
+function _showLoginError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function _syncAttemptDots() {
+  for (let i = 1; i <= MAX_ATTEMPTS; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (!dot) continue;
+    dot.classList.remove('used','ok');
+    if (i <= _attempts) dot.classList.add('used');
+  }
+}
+
+function _applyLockoutUI() {
+  const btn = document.getElementById('loginBtn');
+  const passGroup = document.getElementById('passGroup');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  passGroup.style.display = 'none';
+  _showLoginError('');
+  const lockEl = document.getElementById('lockoutTimer');
+  lockEl.style.display = 'block';
+
+  const tick = () => {
+    const ms = _lockedUntil - Date.now();
+    if (ms <= 0) {
+      _clearLockoutUI();
+      return;
+    }
+    const m = Math.floor(ms/60000);
+    const s = Math.floor((ms%60000)/1000);
+    lockEl.textContent = `🔒 Too many attempts. Try again in ${m}:${s.toString().padStart(2,'0')}`;
+    setTimeout(tick, 1000);
+  };
+  tick();
+}
+
+function _clearLockoutUI() {
+  const btn = document.getElementById('loginBtn');
+  const passGroup = document.getElementById('passGroup');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  passGroup.style.display = 'block';
+  document.getElementById('lockoutTimer').style.display = 'none';
+  document.getElementById('loginError').style.display = 'none';
+  _attempts = 0;
+  _syncAttemptDots();
+}
+
+// ════════════════════════════════════════
+// SESSION MANAGEMENT
+// ════════════════════════════════════════
+function _startSession() {
+  _resetInactivity();
+  document.getElementById('sessionBar').classList.add('active');
+  _sessionInterval = setInterval(_tickSession, 1000);
+  // Activity listeners
+  ['mousemove','keydown','click','touchstart'].forEach(ev => {
+    document.addEventListener(ev, _resetInactivity, { passive: true });
+  });
+}
+
+function _endSession() {
+  clearInterval(_sessionInterval);
+  clearTimeout(_inactTimer);
+  document.getElementById('sessionBar').classList.remove('active');
+  ['mousemove','keydown','click','touchstart'].forEach(ev => {
+    document.removeEventListener(ev, _resetInactivity);
+  });
+}
+
+function _resetInactivity() {
+  clearTimeout(_inactTimer);
+  _inactTimer = setTimeout(() => {
+    if (isLoggedIn) { toast('⏰ Session expired — logged out for security'); logout(); }
+  }, INACTIVITY_MS);
+}
+
+function _tickSession() {
+  if (!isLoggedIn) return;
+  const elapsed = Date.now() - _sessionStart;
+  const remaining = SESSION_MS - elapsed;
+
+  if (remaining <= 0) {
+    toast('⏰ Session timed out — please login again');
+    logout();
+    return;
+  }
+
+  const m = Math.floor(remaining / 60000);
+  const s = Math.floor((remaining % 60000) / 1000);
+  const timeStr = `${m}:${s.toString().padStart(2,'0')}`;
+  document.getElementById('sessionTimeDisplay').textContent = timeStr;
+  document.getElementById('sessionBarTime').textContent = timeStr + ' remaining';
+  const pct = ((SESSION_MS - remaining) / SESSION_MS * 100).toFixed(1);
+  document.getElementById('sessionProgress').style.width = pct + '%';
+}
+
+// ════════════════════════════════════════
+// GUARD — prevent direct access to admin functions
+// ════════════════════════════════════════
+function _guard() {
+  if (!isLoggedIn || !_sessionToken) {
+    toast('🔒 Please login first');
+    openLogin();
+    return false;
+  }
+  if (Date.now() - _sessionStart > SESSION_MS) {
+    logout();
+    return false;
+  }
+  return true;
+}
+
+// ════════════════════════════════════════
+// STORE / ADMIN NAVIGATION
+// ════════════════════════════════════════
+function showStore() {
+  document.getElementById('storeView').classList.remove('hidden');
+  document.getElementById('adminPanel').classList.add('hidden');
+  document.getElementById('loginModal').classList.add('hidden');
+  loadProducts();
+}
+
+function showAdmin() {
+  if (!_guard()) return;
+  document.getElementById('storeView').classList.add('hidden');
+  document.getElementById('adminPanel').classList.remove('hidden');
+  loadProducts().then(() => { renderAdmin(); updateStats(); });
+}
+
+// ════════════════════════════════════════
+// JSONBIN LOAD / SAVE
+// ════════════════════════════════════════
+async function loadProducts() {
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'GET',
+      redirect: 'follow'
+    });
+    if (!res.ok) { console.error('Load error:', res.status); products = []; renderProducts(); return; }
+    const text = await res.text();
+    try { products = JSON.parse(text) || []; }
+    catch(pe) { console.error('Parse error:', text); products = []; }
+  } catch(e) {
+    console.error('Load failed:', e);
+    products = JSON.parse(localStorage.getItem('ee_cache') || '[]');
+  }
+  renderProducts();
+}
+
+async function saveToCloud() {
+  if (!_guard()) return false;
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(products)
+    });
+    if (!res.ok) {
+      console.error('Save error:', res.status, await res.text());
+      return false;
+    }
+    const result = await res.text();
+    console.log('Save response:', result);
+    localStorage.setItem('ee_cache', JSON.stringify(products));
+    return true;
+  } catch(e) {
+    console.error('Save failed:', e.message);
+    return false;
+  }
+}
+
+// ════════════════════════════════════════
+// RENDER STORE
+// ════════════════════════════════════════
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  const list = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">${products.length===0?'No products yet!':'No products here'}</div><div class="empty-sub">${products.length===0?'Check back soon!':'Try another category'}</div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map((p,i) => `
+    <div class="product-card" style="animation-delay:${i*0.06}s">
+      <div class="product-img-wrap">
+        <img src="${p.image}" alt="${esc(p.name)}" loading="lazy">
+        <div class="product-category-tag">${esc(p.category)}</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">${esc(p.name)}</div>
+        ${p.desc ? `<div class="product-desc">${esc(p.desc)}</div>` : ''}
+        <div class="product-price">GH₵ ${esc(p.price)} <span>· Delivery available</span></div>
+        <a href="${buildWA(p)}" class="wa-order-btn" target="_blank">💬 Order on WhatsApp</a>
+      </div>
+    </div>`).join('');
+}
+
+function buildWA(p) {
+  const msg = encodeURIComponent(`Hello E&E Shoprite! 👋\n\nI want to order:\n\n🛍️ *${p.name}*\n💰 Price: GH₵ ${p.price}\n📦 Category: ${p.category}\n\nPlease confirm availability and delivery. Thank you!`);
+  return `https://wa.me/${p.wa}?text=${msg}`;
+}
+
+function filterProducts(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+// ════════════════════════════════════════
+// RENDER ADMIN
+// ════════════════════════════════════════
+function renderAdmin() {
+  if (!_guard()) return;
+  const grid = document.getElementById('adminProdGrid');
+  document.getElementById('adminProdCount').textContent = `${products.length} product${products.length!==1?'s':''}`;
+  if (!products.length) {
+    grid.innerHTML = `<div style="color:var(--blue-soft);font-size:13px;padding:16px 0;">No products yet. Add your first one above!</div>`;
+    return;
+  }
+  grid.innerHTML = products.map((p,i) => `
+    <div class="admin-prod-card">
+      <img class="admin-prod-img" src="${p.image}" alt="${esc(p.name)}">
+      <div class="admin-prod-body">
+        <div class="admin-prod-name">${esc(p.name)}</div>
+        <div class="admin-prod-price">GH₵ ${esc(p.price)} · ${esc(p.category)}</div>
+        <div class="admin-prod-actions">
+          <button class="btn btn-red btn-sm" onclick="deleteProduct(${i})">🗑️ Delete</button>
+          <a href="${buildWA(p)}" class="btn btn-green btn-sm" target="_blank">💬 Test</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = products.length;
+  document.getElementById('statHome').textContent = products.filter(p=>p.category==='Home Appliances').length;
+  document.getElementById('statBody').textContent = products.filter(p=>p.category==='Body Care').length;
+  document.getElementById('statElec').textContent = products.filter(p=>p.category==='Electrical').length;
+}
+
+// ════════════════════════════════════════
+// IMAGE COMPRESS
+// ════════════════════════════════════════
+function previewImage(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX){h=h*(MAX/w);w=MAX;} } else { if (h > MAX){w=w*(MAX/h);h=MAX;} }
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      currentImg = canvas.toDataURL('image/jpeg', 0.72);
+      const prev = document.getElementById('imgPreview');
+      prev.src = currentImg; prev.style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ════════════════════════════════════════
+// ADD / DELETE PRODUCT (guarded)
+// ════════════════════════════════════════
+let _lastAdd = 0;
+async function addProduct() {
+  if (!_guard()) return;
+  // Rate limit: no more than 1 add per 3 seconds
+  if (Date.now() - _lastAdd < 3000) { toast('⏳ Please wait before adding another product'); return; }
+
+  const name = document.getElementById('pName').value.trim();
+  const price = document.getElementById('pPrice').value.trim();
+  const category = document.getElementById('pCategory').value;
+  const desc = document.getElementById('pDesc').value.trim();
+  const wa = document.getElementById('pWA').value;
+  if (!name||!price||!category) { toast('⚠️ Fill Name, Price and Category'); return; }
+  if (!currentImg) { toast('⚠️ Please upload a product image'); return; }
+
+  _lastAdd = Date.now();
+  const ind = document.getElementById('savingInd');
+  ind.style.display = 'block';
+
+  const prod = { id:Date.now(), name, price, category, desc, wa, image:currentImg };
+  products.unshift(prod);
+  const ok = await saveToCloud();
+  ind.style.display = 'none';
+
+  if (ok) {
+    ['pName','pPrice','pDesc'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('pCategory').value='';
+    document.getElementById('pImage').value='';
+    document.getElementById('imgPreview').style.display='none';
+    currentImg = '';
+    renderAdmin(); updateStats();
+    toast('✅ Product added! Everyone can now see it 🎉');
+  } else {
+    products.shift();
+    toast('❌ Failed to save. Check your internet connection.');
+  }
+}
+
+async function deleteProduct(i) {
+  if (!_guard()) return;
+  if (!confirm('Delete this product?')) return;
+  const removed = products.splice(i,1)[0];
+  const ok = await saveToCloud();
+  if (ok) { renderAdmin(); updateStats(); toast('🗑️ Product deleted'); }
+  else { products.splice(i,0,removed); toast('❌ Delete failed'); }
+}
+
+// ════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── INIT ──
+loadProducts();
+</script>
+</body>
+</html>
